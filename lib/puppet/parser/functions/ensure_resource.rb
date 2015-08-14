@@ -35,7 +35,11 @@ ENDOFDOC
 
   items.each do |item|
     Puppet::Parser::Functions.function(:defined_with_params)
-    if function_defined_with_params(["#{type}[#{item}]", params])
+    params_for_comparison = params
+    if type == "package"
+      params_for_comparison = {}
+    end
+    if function_defined_with_params(["#{type}[#{item}]", params_for_comparison])
       Puppet.debug("Resource #{type}[#{item}] with params #{params} not created because it already exists")
     else
       Puppet.debug("Create new resource #{type}[#{item}] with params #{params}")
